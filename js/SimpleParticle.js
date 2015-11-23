@@ -9,6 +9,9 @@
         mode: "dom",//dom || canvas
         clearCanvas: true,//mode=canvas时，每次更新是否清除canvas
         auto: true,//是否自动开始
+        createNew: function () {
+            return true
+        },//是否创建新粒子
         particlesNum: 10000,//最大粒子数
         duration: 20,//画面更新频率
         effectors: [],//自定义效果集合 function(...){this.apply = function(particle){}}}
@@ -19,13 +22,14 @@
             angle: [0, Math.PI * 2],//初始x,y速度方向，范围0-2π,默认0-2π随机
             life: 2, //生命周期（秒），初始生命0
             size: 8,//初始大小
-            nodeStyle: "position: absolute;border-radius:4px;"//mode=dom有效
+            node: "<div style='position:absolute;border-radius:4px;'></div>"//mode=dom有效
         },
+        updateProperty: [true, true],//是否按生命比率更新[颜色,大小]
         gravity: [0, 100],//(x,y)重力
         acceleration: [0, 100],//加速度，可变
-        initEmtr: null,//初始化发射器对象函数，参数：发射器坐标对象（x,y），初始(0,0)，自由扩展属性
-        emtrTrail: null,//粒子发射源运动轨迹函数，此时忽略 position 初始值及容器，参数:（SimpleParticle对象,发射器坐标对象)
-        onStart: null//每轮渲染前执行的函数，参数：this（SimpleParticle对象）
+        initEmtr: null,//粒子发射源初始执行方法，可用于emtrTrail扩展参数。参数:（发射源Particle对象)
+        emtrTrail: null,//粒子发射源运动轨迹函数。参数:（发射源Particle对象)
+        onStart: null//每个粒子渲染前执行的函数。参数：（Particle粒子对象,dom粒子对象）
     };
     $.fn.simpleParticles = function (method) {
         // 合并参数
@@ -152,6 +156,7 @@
             return this.createColor(color)
         },
         _addBornParticle: function () {
+            if (!this.options.createNew || !this.options.createNew()) return;
             var n;
             if (this.options.mode == "dom") {
                 n = this.initNode();
@@ -171,10 +176,9 @@
             this.particles.push(p);
         },
         initNode: function () {
-            var n = document.createElement("div");
-            n.style.cssText = this.options.particle.nodeStyle;
-            n.className = "simple-particle-node";
-            return n;
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = this.options.particle.node;
+            return wrapper.firstChild;
         },
         _analyzeEmtrValue: function (emtr) {
             if (Object.prototype.toString.call(emtr.position) == '[object Array]' && emtr.position.length >= 2) {
@@ -280,25 +284,27 @@
             if (this.options.emtrTrail) {
                 this.options.emtrTrail(this.emtr);
             }
-            this.options.onStart && this.options.onStart(this);
             this._applyGravity();
             this._applyEffectors();
             this.options.mode == "dom" ? this._updateDomParticle() : this._updateCtxParticle();
         },
-        _updateDomParticle: function (p) {
+        _updateDomParticle: function () {
             for (var i in this.particles) {
-                var p = this.particles[i];
-                var color = "rgba("
-                    + Math.floor(p.color.r * 255) + ","
-                    + Math.floor(p.color.g * 255) + ","
-                    + Math.floor(p.color.b * 255) + ","
-                    + (1 - p.age / p.life).toFixed(2) + ")";
-                var node = p.node;
-                node.style.backgroundColor = color;
-                node.style.left = (p.position.x - p.size / 2).toFixed(2) + "px";
-                node.style.top = (p.position.y - p.size / 2).toFixed(2) - p.size / 2 + "px";
-                node.style.height = p.size.toFixed(2) + "px";
-                node.style.width = p.size.toFixed(2) + "px";
+                var p = this.particles[i], per = (1 - p.age / p.life).toFixed(2);
+                var node = p.node, size = (this.options.updateProperty[1] ? p.size * per : p.size);
+                if (this.options.updateProperty[0]) {
+                    var color = "rgba("
+                        + Math.floor(p.color.r * 255) + ","
+                        + Math.floor(p.color.g * 255) + ","
+                        + Math.floor(p.color.b * 255) + ","
+                        + per + ")";
+                    node.style.backgroundColor = color;
+                }
+                node.style.left = (p.position.x - size / 2).toFixed(2) + "px";
+                node.style.top = (p.position.y - size / 2).toFixed(2) - p.size / 2 + "px";
+                node.style.height = size + "px";
+                node.style.width = size + "px";
+                this.options.onStart && this.options.onStart(p, node);
             }
         },
         _updateCtxParticle: function () {
@@ -309,16 +315,17 @@
                 this.ctx.fillRect(0, 0, this.ele.width, this.ele.height);
             }
             for (var i in this.particles) {
-                var p = this.particles[i];
-                var color = "rgba("
+                var p = this.particles[i], per = (1 - p.age / p.life).toFixed(2);
+                this.options.onStart && this.options.onStart(p);
+                this.ctx.beginPath();
+                this.ctx.arc(p.position.x, p.position.y, this.options.updateProperty[1] ? p.size * per / 2 : p.size / 2, 0, Math.PI * 2, true);
+                this.ctx.closePath();
+                var rgbacolor = "rgba("
                     + Math.floor(p.color.r * 255) + ","
                     + Math.floor(p.color.g * 255) + ","
-                    + Math.floor(p.color.b * 255) + ","
-                    + (1 - p.age / p.life).toFixed(2) + ")";
-                this.ctx.beginPath();
-                this.ctx.arc(p.position.x, p.position.y, p.size / 2, 0, Math.PI * 2, true);
-                this.ctx.closePath();
-                this.ctx.fillStyle = color;
+                    + Math.floor(p.color.b * 255) + ",";
+                rgbacolor = rgbacolor + (this.options.updateProperty[0] ? per : "1") + ")";
+                this.ctx.fillStyle = rgbacolor;
                 this.ctx.fill();
             }
         },
