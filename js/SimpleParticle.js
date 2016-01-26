@@ -1,8 +1,12 @@
-/**
- * @author wr
+/* =========================================================== *
+ * @site http:tt-cc.cn
  * @email mvpjly@163.com
- * @date 2014/08/19
- */
+ * Copyright 2014 imwr
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ *
+ * Refer to http://www.cnblogs.com/miloyip/archive/2010/06/14/kinematics_particlesystem.html
+ *
+ * =========================================================== */
 ;
 (function ($) {
     var defaults = {

@@ -1,35 +1,35 @@
 # SimpleParticle
-Simple Particle ¡ª¡ª ¼òµ¥µÄÁ£×ÓÏµÍ³£¬Ö§³Ö dom ºÍ canvas Ä£Ê½£¬¶¯Ì¬¸üĞÂÁ£×ÓÎ»ÖÃ¡¢ËÙ¶È¡¢·½ÏòºÍÑÕÉ«¡£
+Simple Particle ç®€å•çš„ç²’å­ç³»ç»Ÿï¼Œæ”¯æŒ dom æˆ– canvas æ¨¡å¼
 
 ###options###
 ```html
 mode: "dom",//dom || canvas
-clearCanvas: true,//mode=canvasÊ±£¬Ã¿´Î¸üĞÂÊÇ·ñÇå³ıcanvas
-auto: true,//ÊÇ·ñ×Ô¶¯¿ªÊ¼
-particlesNum: 10000,//×î´óÁ£×ÓÊı
-duration: 20,//»­Ãæ¸üĞÂÆµÂÊ
-effectors: [],//×Ô¶¨ÒåĞ§¹û¼¯ºÏ function(...){this.apply = function(particle){}}}
+clearCanvas: true,//mode=canvasæ—¶ï¼Œæ¯æ¬¡æ›´æ–°æ˜¯å¦æ¸…é™¤canvas
+auto: true,//æ˜¯å¦è‡ªåŠ¨å¼€å§‹
 createNew: function () {
     return true
-},//ÊÇ·ñ´´½¨ĞÂÁ£×Ó
+},//æ˜¯å¦åˆ›å»ºæ–°ç²’å­
+particlesNum: 10000,//æœ€å¤§ç²’å­æ•°
+duration: 20,//ç”»é¢æ›´æ–°é¢‘ç‡
+effectors: [],//è‡ªå®šä¹‰æ•ˆæœé›†åˆ function(...){this.apply = function(particle){}}}
 particle: {
-    position: null,//³õÊ¼Î»ÖÃÊı×é[x,y]£¬Ä¬ÈÏÈİÆ÷ÄÚËæ»úÎ»ÖÃ,»òÖ¸¶¨Ëæ»ú·¶Î§Èç:[[100,200], [10,30]]£¬Ä¬ÈÏÈİÆ÷ÖĞÑë
-    speed: [100, 100],//³õÊ¼x,yËÙ¶È´óĞ¡Êı×é[vx,vy],Ä¬ÈÏ[100, 500]Ëæ»ú£¬»òÖ¸¶¨Ëæ»ú·¶Î§Èç:[[100,200], [10,30]]
-    color: "random",//[R,G,B],³õÊ¼ÑÕÉ«£¬Ä¬ÈÏËæ»ú£¬»òÖ¸¶¨Ëæ»ú·¶Î§Èç:[[0,0,1], [1,0,0]]£¬["white", "red"]
-    angle: [0, Math.PI * 2],//³õÊ¼x,yËÙ¶È·½Ïò£¬·¶Î§0-2¦Ğ,Ä¬ÈÏ0-2¦ĞËæ»ú
-    life: 2, //ÉúÃüÖÜÆÚ£¨Ãë£©£¬³õÊ¼ÉúÃü0
-    size: 8,//³õÊ¼´óĞ¡
-    node: "<div style='position:absolute;border-radius:4px;'></div>"//mode=domÓĞĞ§
+    position: null,//åˆå§‹ä½ç½®æ•°ç»„[x,y]ï¼Œé»˜è®¤å®¹å™¨å†…éšæœºä½ç½®,æˆ–æŒ‡å®šéšæœºèŒƒå›´å¦‚:[[100,200], [10,30]]ï¼Œé»˜è®¤å®¹å™¨ä¸­å¤®
+    speed: [100, 100],//åˆå§‹x,yé€Ÿåº¦å¤§å°æ•°ç»„[vx,vy],é»˜è®¤[100, 500]éšæœºï¼Œæˆ–æŒ‡å®šéšæœºèŒƒå›´å¦‚:[[100,200], [10,30]]
+    color: "random",//[R,G,B],åˆå§‹é¢œè‰²ï¼Œé»˜è®¤éšæœºï¼Œæˆ–æŒ‡å®šéšæœºèŒƒå›´å¦‚:[[0,0,1], [1,0,0]]ï¼Œ["white", "red"]
+    angle: [0, Math.PI * 2],//åˆå§‹x,yé€Ÿåº¦æ–¹å‘ï¼ŒèŒƒå›´0-2Ï€,é»˜è®¤0-2Ï€éšæœº
+    life: 2, //ç”Ÿå‘½å‘¨æœŸï¼ˆç§’ï¼‰ï¼Œåˆå§‹ç”Ÿå‘½0
+    size: 8,//åˆå§‹å¤§å°
+    node: "<div style='position:absolute;border-radius:4px;'></div>"//mode=domæœ‰æ•ˆ
 },
-updateProperty: [true, true],//ÊÇ·ñ°´ÉúÃü±ÈÂÊ¸üĞÂ[ÑÕÉ«,´óĞ¡]
-gravity: [0, 100],//(x,y)ÖØÁ¦
-acceleration: [0, 100],//¼ÓËÙ¶È£¬¿É±ä
-initEmtr: null,//Á£×Ó·¢ÉäÔ´³õÊ¼Ö´ĞĞ·½·¨£¬¿ÉÓÃÓÚemtrTrailÀ©Õ¹²ÎÊı¡£²ÎÊı:£¨·¢ÉäÔ´Particle¶ÔÏó)
-emtrTrail: null,//Á£×Ó·¢ÉäÔ´ÔË¶¯¹ì¼£º¯Êı¡£²ÎÊı:£¨·¢ÉäÔ´Particle¶ÔÏó)
-onStart: null//Ã¿¸öÁ£×ÓäÖÈ¾Ç°Ö´ĞĞµÄº¯Êı¡£²ÎÊı£º£¨ParticleÁ£×Ó¶ÔÏó,domÁ£×Ó¶ÔÏó£©
+updateProperty: [true, true],//æ˜¯å¦æŒ‰ç”Ÿå‘½æ¯”ç‡æ›´æ–°[é¢œè‰²,å¤§å°]
+gravity: [0, 100],//(x,y)é‡åŠ›
+acceleration: [0, 100],//åŠ é€Ÿåº¦ï¼Œå¯å˜
+initEmtr: null,//ç²’å­å‘å°„æºåˆå§‹æ‰§è¡Œæ–¹æ³•ï¼Œå¯ç”¨äºemtrTrailæ‰©å±•å‚æ•°ã€‚å‚æ•°:ï¼ˆå‘å°„æºParticleå¯¹è±¡)
+emtrTrail: null,//ç²’å­å‘å°„æºè¿åŠ¨è½¨è¿¹å‡½æ•°ã€‚å‚æ•°:ï¼ˆå‘å°„æºParticleå¯¹è±¡)
+onStart: null//æ¯ä¸ªç²’å­æ¸²æŸ“å‰æ‰§è¡Œçš„å‡½æ•°ã€‚å‚æ•°ï¼šï¼ˆParticleç²’å­å¯¹è±¡,domç²’å­å¯¹è±¡ï¼‰
 ```
 ###method###
-+ start/stop/pause/resume/toggle();//ÏµÍ³¿ªÊ¼/Í£Ö¹/ÔİÍ£/»Ö¸´/toggle
++ start/stop/pause/resume/toggle();
 
 ###snapshot###
 ![image](snapshot/test.png)
