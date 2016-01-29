@@ -268,7 +268,7 @@
                 _this.update();
             }, _this.options.auto);
             _this.start = function () {
-                _this.timer && _this.timer.start();
+                _this.timer && _this.timer.start(_this.options.duration);
             };
             _this.stop = function () {
                 _this.timer && _this.timer.stop();
@@ -529,7 +529,7 @@
         }
     };
     $.timer = function (interval, callback, autostart) {
-        var options = jQuery.extend({reset: 500}, autostart);
+        var options = jQuery.extend({reset: 20}, autostart);
         interval = interval || options.reset;
         if (!callback) {
             return false;
@@ -559,7 +559,9 @@
                 if (self.id) {
                     clearInterval(self.id);
                 }
-                time = time || options.reset;
+                if (!time || time <= 0) {
+                    time = options.reset;
+                }
                 this.id = setInterval($.proxy(this.internalCallback, this), time);
                 this.state = 1;
                 return true;
