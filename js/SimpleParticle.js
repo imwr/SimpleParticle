@@ -28,38 +28,39 @@
             size: 8,//初始大小
             node: "<div style='position:absolute;border-radius:4px;'></div>"//mode=dom有效
         },
+        particles: null,//初始设置粒子Particle集合(不会创建新的粒子)，Particle = $(dom).simpleParticles("createParticle", particle's option)
         updateProperty: [true, true],//是否按生命比率更新[颜色,大小]
         gravity: [0, 100],//(x,y)重力
         acceleration: [0, 100],//加速度，可变
         initEmtr: null,//粒子发射源初始执行方法，可用于emtrTrail扩展参数。参数:（发射源Particle对象)
         emtrTrail: null,//粒子发射源运动轨迹函数。参数:（发射源Particle对象)
-        onStart: null//每个粒子渲染前执行的函数。参数：（Particle粒子对象,dom粒子对象）
+        onStart: null//粒子渲染前执行的函数。参数：（Particles粒子集合对象, 发射源Particle对象）
     };
     $.fn.simpleParticles = function (method) {
-        // 合并参数
-        return this.each(function () {
-            // 在这里编写相应的代码进行处理
+        var args = arguments, retval;
+        this.each(function () {
             var ui = $._data(this, "SimpleParticle");
-            // 如果该元素没有初始化过(可能是新添加的元素), 就初始化它.
             if (!ui) {
                 if (method == "destroy") return;
                 var opts = $.extend(true, {}, defaults, typeof method === "object" ? method : {});
                 ui = new SimpleParticle(this, opts);
-                // 缓存插件
                 $._data(this, "SimpleParticle", ui);
             }
-            // 调用方法
             if (typeof method === "string" && typeof ui[method] == "function") {
-                // 执行插件的方法
-                ui[method].apply(ui, arguments);
-                method == "destroy" && $._data(this, "SimpleParticle", null);
+                retval = ui[method].apply(ui, Array.prototype.slice.call(args, 1));
+                (method == "destroy") && $._data(this, "SimpleParticle", null);
             }
         });
+        return retval || this
     };
     var SimpleParticle = function (element, options) {
         this.ele = element;
         this.options = options;
         return "undefined" != typeof this.init && this.init.apply(this, arguments)
+    };
+    $.fn.test = function () {
+        var ui = $._data(this[0], "SimpleParticle");
+        return ui.randColor();
     };
     SimpleParticle.prototype = {
         init: function () {
@@ -85,7 +86,8 @@
             return this;
         },
         _initValue: function () {
-            this.particles = [];
+            this.createNewParticles = !this.options.particles;
+            this.particles = this.options.particles || [];
             this.effectors = [];
             this.gravity = this.createPoint(this.options.gravity);
             this.acceleration = this.createPoint(this.options.acceleration);
@@ -168,16 +170,18 @@
             }
             //如果是自定义发射源，应用参数
             this.options.emtrTrail && this._analyzeEmtrValue(this.emtr);
-            var p = new Particle({
-                position: this.initPosition(),
-                velocity: this.initVelocity(),
-                life: this.options.particle.life,
-                color: this.initColor(),
-                size: this.options.particle.size,
-                node: n
+            this.particles.push(this.createParticle({node: n}));
+        },
+        createParticle: function (particle) {
+            particle = particle || {};
+            return new Particle({
+                position: particle.position ? this.createPoint(particle.position.x, particle.position.y) : this.initPosition(),
+                velocity: particle.velocity || this.initVelocity(),
+                life: particle.life || this.options.particle.life,
+                color: particle.color || this.initColor(),
+                size: particle.size || this.options.particle.size,
+                node: particle.node
             });
-            //console.log(p);
-            this.particles.push(p);
         },
         initNode: function () {
             var wrapper = document.createElement('div');
@@ -284,7 +288,7 @@
             };
         },
         update: function () {
-            this.particles.length < this.options.particlesNum && this._addBornParticle();
+            this.createNewParticles && this.particles.length < this.options.particlesNum && this._addBornParticle();
             if (this.options.emtrTrail) {
                 this.options.emtrTrail(this.emtr);
             }
@@ -308,8 +312,8 @@
                 node.style.top = (p.position.y - size / 2).toFixed(2) - p.size / 2 + "px";
                 node.style.height = size + "px";
                 node.style.width = size + "px";
-                this.options.onStart && this.options.onStart(p, node);
             }
+            this.options.onStart && this.options.onStart(this.particles, this.emtr);
         },
         _updateCtxParticle: function () {
             if (this.options.clearCanvas) {
@@ -320,7 +324,6 @@
             }
             for (var i in this.particles) {
                 var p = this.particles[i], per = (1 - p.age / p.life).toFixed(2);
-                this.options.onStart && this.options.onStart(p);
                 this.ctx.beginPath();
                 this.ctx.arc(p.position.x, p.position.y, this.options.updateProperty[1] ? p.size * per / 2 : p.size / 2, 0, Math.PI * 2, true);
                 this.ctx.closePath();
@@ -332,6 +335,7 @@
                 this.ctx.fillStyle = rgbacolor;
                 this.ctx.fill();
             }
+            this.options.onStart && this.options.onStart(this.particles, this.emtr);
         },
         _applyGravity: function () {
             for (var i in this.particles) {
