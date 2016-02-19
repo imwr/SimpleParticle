@@ -30,7 +30,9 @@ emtrTrail: null,//粒子发射源运动轨迹函数。参数:（发射源Particl
 onStart: null//粒子渲染前执行的函数。参数：（Particles粒子集合对象, 发射源Particle对象）
 ```
 ###method###
-+ start/stop/pause/resume/toggle();
++ start/stop/pause/resume/toggle()
++ setting 动态更新参数
++ createParticle 动态创建粒子Particle
 
 ###snapshot###
 ![image](snapshot/test.png)

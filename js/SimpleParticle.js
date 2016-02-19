@@ -123,6 +123,14 @@
                 }
             }
         },
+        settings: function (opts) {
+            this.options = $.extend(true, {}, this.options, opts || {});
+            if (opts.duration) {
+                this.duration = this.options.duration / 1000;
+                this.stop();
+                this.start();
+            }
+        },
         initPosition: function () {
             if (Object.prototype.toString.call(this.position) == '[object Array]' && this.position.length >= 2) {
                 var x = this.position[0], y = this.position[1];
@@ -175,8 +183,10 @@
         createParticle: function (particle) {
             particle = particle || {};
             return new Particle({
-                position: particle.position ? this.createPoint(particle.position.x, particle.position.y) : this.initPosition(),
-                velocity: particle.velocity || this.initVelocity(),
+                position: particle.position && particle.position.length == 2 ?
+                    this.createPoint(particle.position[0], particle.position[1]) : this.initPosition(),
+                velocity: particle.speed && particle.speed.length == 2 && particle.angle && particle.angle.length == 2 ?
+                    this.ranVelocity(particle.angle[0], particle.angle[1], particle.speed[0], particle.speed[1]) : this.initVelocity(),
                 life: particle.life || this.options.particle.life,
                 color: particle.color || this.initColor(),
                 size: particle.size || this.options.particle.size,
@@ -301,12 +311,11 @@
                 var p = this.particles[i], per = (1 - p.age / p.life).toFixed(2);
                 var node = p.node, size = (this.options.updateProperty[1] ? p.size * per : p.size);
                 if (this.options.updateProperty[0]) {
-                    var color = "rgba("
+                    node.style.backgroundColor = "rgba("
                         + Math.floor(p.color.r * 255) + ","
                         + Math.floor(p.color.g * 255) + ","
                         + Math.floor(p.color.b * 255) + ","
                         + per + ")";
-                    node.style.backgroundColor = color;
                 }
                 node.style.left = (p.position.x - size / 2).toFixed(2) + "px";
                 node.style.top = (p.position.y - size / 2).toFixed(2) - p.size / 2 + "px";
@@ -363,15 +372,17 @@
         },
         destroy: function () {
             if (this.options.mode == "dom") {
-                this.container.empty()
+                for (var i in this.particles) {
+                    $(this.particles[i].node).remove()
+                }
             } else {
                 this.ctx.clearRect(0, 0, this.ele.width, this.ele.height);
                 this.ctx = null;
             }
             this.stop();
             this.timer = null;
-            this.particles = [];
-            this.effectors = [];
+            this.particles = null;
+            this.effectors = null;
         }
     };
     var Particle = function () {
