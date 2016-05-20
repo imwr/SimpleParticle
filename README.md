@@ -37,5 +37,7 @@ onStart: null//粒子渲染前执行的函数。参数：（Particles粒子集�
 ###snapshot###
 ![image](snapshot/test.png)
 
+<!--
 ###demo###
 See [here](http://tt-cc.cn/front-end/jquery-plugins/particle)
+-->

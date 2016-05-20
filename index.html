@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>Simple Particle —— 简单的粒子系统</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+    <meta name="keywords" content="tt-cc"/>
+    <meta name="description" content="tt-cc"/>
+    <meta http-equiv="Cache-Control" content="no-transform "/>
+    <link rel="shortcut icon" href="http://imwr.github.io/resources/favicon.ico">
+    <link rel="bookmark" href="http://imwr.github.io/resources/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="http://imwr.github.io/resources/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="http://imwr.github.io/resources/css/github-example.css">
+    <script type="text/javascript" src="http://imwr.github.io/resources/js/jquery-1.11.3.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://imwr.github.io/resources/syntax/shCoreDefault.css"/>
+
+    <script src="js/SimpleParticle.js"></script>
+</head>
+<body>
+<header>
+    <div class="main-inner">
+        <a href="https://github.com/imwr/SimpleParticle" target="_blank" class="button">
+            <small>View project on</small>
+            GitHub</a>
+
+        <h1>Imwr</h1>
+    </div>
+</header>
+<section class="main-inner" id="main-inner">
+    <div class="paper-title">Demo1:</div>
+    <div class="paper-div">
+        <div id="demo1" style="width:100%;height:300px;background: #222;"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title">Demo2:</div>
+    <div class="paper-tips">点击以下区域开始/暂停运动</div>
+    <div class="paper-div">
+        <div id="demo2" style="width:100%;height:100px;background: #222;"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title">Demo3:</div>
+    <div class="paper-tips">点击以下区域开始/暂停运动</div>
+    <div class="paper-div">
+        <div id="demo3" style="width: 200px;max-width: 100%;height:200px;background: #000"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title">Demo4:</div>
+    <div class="paper-tips">点击以下区域开始/暂停运动</div>
+    <div class="paper-div">
+        <div id="demo4" style="width: 320px;max-width: 100%;height:320px;background: #000"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title">Demo5:</div>
+    <div class="paper-tips">点击以下区域开始/暂停运动</div>
+    <div class="paper-div">
+        <div id="demo5" style="width: 320px;max-width: 100%;height:320px;background: #000"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title">Demo6:</div>
+    <div class="paper-div">
+        <div class="paper-tips">见鼠标流星尾巴</div>
+        <div id="demo6"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title">
+        <button onclick="$('#demo').simpleParticles('destroy');eval(document.getElementById('yourcode').value)"
+                type="button">Run Custom Code In Demo
+        </button>
+    </div>
+    <textarea id="yourcode" style="width: 100%;height:200px; font-size: 12px;line-height: 20px">
+    $("#demo").simpleParticles({
+        mode: "dom",
+        clearCanvas: true,
+        auto: true,
+        particlesNum: 10000,
+        duration: 20,
+        effectors: [],
+        particle: {
+            position: null,
+            speed: [100, 100],
+            color: "random",
+            angle: [0, Math.PI * 2],
+            life: 2,
+            size: 8,
+            nodeStyle: "position: absolute;border-radius:4px;"
+        },
+        gravity: [0, 100],
+        acceleration: [0, 100],
+        initEmtr: null,
+        emtrTrail: null,
+        onStart: null
+    })
+    </textarea>
+
+    <div class="paper-div">
+        <div id="demo" style="width: 320px;max-width: 100%;height:320px;background: #000"></div>
+    </div>
+    <div class="paper-sep"></div>
+
+    <div class="paper-title paper-specil" id="options">options:</div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th width="15%">参数名</th>
+            <th width="15%">类型</th>
+            <th width="20%">默认值</th>
+            <th width="50%">说明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>mode</td>
+            <td>string</td>
+            <td>dom</td>
+            <td>渲染模式：dom 或者 canvas</td>
+        </tr>
+        <tr>
+            <td>clearCanvas</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>渲染方式为canvas时，每次更新是否清除屏幕，为false可创造尾巴效果，参见demo4</td>
+        </tr>
+        <tr>
+            <td>auto</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>是否自动开始运动</td>
+        </tr>
+        <tr>
+            <td>createNew</td>
+            <td>function</td>
+            <td>return true</td>
+            <td>是否持续创建新粒子</td>
+        </tr>
+        <tr>
+            <td>particlesNum</td>
+            <td>number</td>
+            <td>10000</td>
+            <td>最大粒子数</td>
+        </tr>
+        <tr>
+            <td>duration</td>
+            <td>number</td>
+            <td>20</td>
+            <td>更新频率</td>
+        </tr>
+        <tr>
+            <td>effectors</td>
+            <td>function</td>
+            <td>[]</td>
+            <td>附近粒子效果，参见Demo3盒子效果</td>
+        </tr>
+        <tr>
+            <td>particle</td>
+            <td>Particle</td>
+            <td></td>
+            <td>粒子对象属性，见下表</td>
+        </tr>
+        <tr>
+            <td>particles</td>
+            <td>Array</td>
+            <td>null</td>
+            <td>初始设置粒子Particle集合(不会创建新的粒子)，Particle = $(dom).simpleParticles("createParticle", particle's option)
+            </td>
+        </tr>
+        <tr>
+            <td>updateProperty</td>
+            <td>array</td>
+            <td>[true, true]</td>
+            <td>是否按生命比率更新[颜色,大小]</td>
+        </tr>
+        <tr>
+            <td>gravity</td>
+            <td>array</td>
+            <td>[0, 100]</td>
+            <td>x、y方向的重力</td>
+        </tr>
+        <tr>
+            <td>acceleration</td>
+            <td>array</td>
+            <td>[0, 100]</td>
+            <td>x、y方向的加速度</td>
+        </tr>
+        <tr>
+            <td>lineColor</td>
+            <td>string</td>
+            <td>#5B8FEF</td>
+            <td>连线颜色</td>
+        </tr>
+        <tr>
+            <td>initEmtr</td>
+            <td>function</td>
+            <td>null</td>
+            <td>粒子发射源初始执行方法，可用于emtrTrail扩展参数。参数:（发射源Particle对象)</td>
+        </tr>
+        <tr>
+            <td>emtrTrail</td>
+            <td>function</td>
+            <td>null</td>
+            <td>粒子发射源运动轨迹函数。参数:（发射源Particle对象)</td>
+        </tr>
+        <tr>
+            <td>onStart</td>
+            <td>function</td>
+            <td>null</td>
+            <td>粒子渲染前执行的函数。参数：（Particles粒子集合对象, 发射源Particle对象）</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="paper-title paper-specil">Particle options:</div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th width="15%">参数名</th>
+            <th width="15%">类型</th>
+            <th width="20%">默认值</th>
+            <th width="50%">说明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>position</td>
+            <td>array</td>
+            <td>容器中央</td>
+            <td>初始位置数组[x,y]，如:[[100,200], [10,30]]</td>
+        </tr>
+        <tr>
+            <td>speed</td>
+            <td>array</td>
+            <td>[100, 100]</td>
+            <td>初始x,y速度大小数组[vx,vy],或指定随机范围如:[[100,200], [10,30]]</td>
+        </tr>
+        <tr>
+            <td>color</td>
+            <td>string || array</td>
+            <td>random</td>
+            <td>[R,G,B]初始颜色，或指定随机范围如:[[0,0,1], [1,0,0]]，["white", "red"]</td>
+        </tr>
+        <tr>
+            <td>angle</td>
+            <td>number || array</td>
+            <td>[0, Math.PI * 2]</td>
+            <td>初始x,y速度方向，范围0-2π,默认0-2π随机(3点钟方向为0度，顺时针加)</td>
+        </tr>
+        <tr>
+            <td>life</td>
+            <td>number</td>
+            <td>2</td>
+            <td>生命周期（秒），初始生命0</td>
+        </tr>
+        <tr>
+            <td>size</td>
+            <td>number</td>
+            <td>8</td>
+            <td>粒子初始大小</td>
+        </tr>
+        <tr>
+            <td>node</td>
+            <td>string</td>
+            <td></td>
+            <td>mode=dom时粒子dom结构</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="paper-title paper-specil">Method:</div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th width="15%">方法名</th>
+            <th width="35%">定义</th>
+            <th width="50%">说明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>start/stop/pause/resume/toggle</td>
+            <td>function()</td>
+            <td>系统开始/停止/暂停/恢复/toggle</td>
+        </tr>
+        <tr>
+            <td>settings</td>
+            <td>function()</td>
+            <td>动态更新参数，参见demo5</td>
+        </tr>
+        <tr>
+            <td>createParticle</td>
+            <td>function()</td>
+            <td>动态创建粒子，参见demo5</td>
+        </tr>
+        <tr>
+            <td>destory</td>
+            <td>function()</td>
+            <td>摧毁</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+<script type="text/javascript" src="http://imwr.github.io/resources/syntax/shCore.js"></script>
+<script type="text/javascript" src="http://imwr.github.io/resources/syntax/shBrushJScriptAndXml.js"></script>
+<script type="text/javascript" src="http://imwr.github.io/resources/js/github-example.js"></script>
+<script type="text/javascript" id="js1">
+    $("#demo1").simpleParticles().on("click", function () {
+        $(this).simpleParticles("toggle");
+    });
+</script>
+<script type="text/javascript" id="js2">
+    var width = document.getElementById("main-inner").offsetWidth;
+    $("#demo2").simpleParticles({
+        auto: false,
+        particlesNum: 50,
+        particle: {
+            speed: [62, 82],
+            life: 0.2,
+            color: "white",
+            size: 12,
+            nodeStyle: "<div style='position:absolute;border-radius:6px;'></div>"
+        },
+        updateProperty: [true, false],
+        gravity: [0, 0],
+        acceleration: [0, 0],
+        initEmtr: function (emtr) {
+            emtr.temp = 1;
+            emtr.position.x = width / 4;
+            emtr.position.y = 56;
+        },
+        emtrTrail: function (emtr) {
+            emtr.position.x += emtr.temp * 1.5;
+            if (emtr.position.x >= width - width / 4) {
+                emtr.temp = -1;
+                emtr.angle = [1 / 2 * Math.PI, -1 / 2 * Math.PI];
+            } else if (emtr.position.x <= width / 4) {
+                emtr.temp = 1;
+                emtr.angle = [1 / 2 * Math.PI, 3 / 2 * Math.PI];
+            }
+        }
+    }).on("click", function () {
+        $(this).simpleParticles("toggle");
+    });
+</script>
+<script type="text/javascript" id="js3">
+    var canvas3Width = Math.min(document.getElementById("demo3").offsetWidth, width);
+    $("#demo3").simpleParticles({
+        mode: "canvas",
+        auto: false,
+        particle: {
+            speed: [160, 100],
+            life: 2.5,
+            angle: [-Math.PI / 8, 0],
+            color: ["red", "white"]
+        },
+        updateProperty: [true, false],
+        effectors: [function (particle) { // BOX DEMO
+            if (particle.position.x - particle.size < 0 || particle.position.x + particle.size > canvas3Width)
+                particle.velocity.x = -particle.velocity.x;
+            if (particle.position.y - particle.size < 0 || particle.position.y + particle.size > 200)
+                particle.velocity.y = -particle.velocity.y;
+        }]
+    }).on("click", function () {
+        $(this).simpleParticles("toggle");
+    });
+</script>
+<script type="text/javascript" id="js4">
+    var canvas4Width = Math.min(document.getElementById("demo4").offsetWidth, width);
+    $("#demo4").simpleParticles({
+        mode: "canvas",
+        clearCanvas: false,
+        auto: false,
+        gravity: [0, 0],
+        acceleration: [0, 0],
+        particle: {
+            speed: [150, 150],
+            life: 2
+        },
+        initEmtr: function (emtr) {
+            emtr.r = 30;
+            emtr.position.x = 160;
+            emtr.position.y = canvas4Width / 2;
+            emtr.omega = 0;
+        },
+        emtrTrail: function (emtr) {
+            emtr.omega += 1 / 20;
+            emtr.angle = emtr.omega + Math.PI;
+        }
+    }).on("click", function () {
+        $(this).simpleParticles("toggle");
+    });
+</script>
+<script type="text/javascript" id="js5">
+    var dom = $("#demo5"), canvas4Width = Math.min(dom[0].offsetWidth, width), newParticles = [], first = true;
+    var options = {
+        mode: "dom",
+        particlesNum: 80,
+        auto: false,
+        gravity: [0, 0],
+        acceleration: [0, 0],
+        particle: {
+            speed: [150, 150],
+            life: 2
+        },
+        onStart: function (particles, emtr) {
+            for (var i in particles) {
+                var node = document.createElement("div"), p = particles[i];
+                node.style.cssText = "position: absolute; border-radius: 3px;box-shadow:0px 0px 8px red";
+                node.style.backgroundColor = "white";
+                node.style.left = p.position.x + "px";
+                node.style.top = p.position.y + "px";
+                node.style.height = "6px";
+                node.style.width = "6px";
+                dom.append(node);
+                newParticles.push(demo5.simpleParticles("createParticle", {
+                    position: [p.position.x, p.position.y],
+                    angle: p.angle,
+                    speed: p.speed,
+                    life: 2.5,
+                    color: {
+                        r: 255,
+                        g: 255,
+                        b: 255
+                    },
+                    size: 8,
+                    node: node
+                }));
+            }
+        }
+    };
+    var demo5 = dom.simpleParticles(options).on("click", function () {
+        if (!first) {
+            $(this).simpleParticles("destroy").simpleParticles(options);
+        } else {
+            first = false;
+        }
+        $(this).simpleParticles("start");
+        setTimeout(function () {
+            demo5.simpleParticles("destroy").simpleParticles({
+                particles: newParticles,
+                gravity: [0, 0],
+                acceleration: [0, 0],
+                effectors: [function (particle) { // BOX DEMO
+                    if (particle.position.x - particle.size < 0 || particle.position.x + particle.size > canvas4Width)
+                        particle.velocity.x = -particle.velocity.x;
+                    if (particle.position.y - particle.size < 0 || particle.position.y + particle.size > 320)
+                        particle.velocity.y = -particle.velocity.y;
+                }]
+            });
+        }, 800);
+        setTimeout(function () {
+            demo5.simpleParticles("settings", {
+                duration: 10
+            });
+        }, 400);
+    });
+</script>
+<script type="text/javascript" id="js6">
+    var oldMousePosition = [0, 0], newMousePosition = [0, 0], index = 1;
+    $("body").simpleParticles({
+        gravity: [0, 0],
+        acceleration: [0, 0],
+        particle: {
+            speed: [10, 10],
+            size: 20,
+            node: "<img src='' style='position:absolute;pointer-events: none;'/>",
+            life: 1.5
+        },
+        createNew: function () {
+            return newMousePosition != oldMousePosition
+        },
+        onStart: function (particles) {
+            for (var i in particles) {
+                var node = particles[i].node;
+                node.src = "images/star" + index + ".png";
+                node.style.backgroundColor = "";
+                index <= 3 ? index++ : (index = 1);
+            }
+        },
+        emtrTrail: function (emtr) {
+            if (newMousePosition != oldMousePosition) {
+                emtr.position.x = newMousePosition[0] + 10;
+                emtr.position.y = newMousePosition[1] + 10;
+                oldMousePosition = newMousePosition
+            }
+        }
+    }).on("mousemove", function (event) {
+        var e = event || window.event;
+        var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+        var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+        var x = e.pageX || e.clientX + scrollX;
+        var y = e.pageY || e.clientY + scrollY;
+        newMousePosition = [x, y];
+    })
+</script>
+<section class="main-inner">
+    <br/>
+    <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_weixin">微信</a>
+        <a class="jiathis_button_tsina">新浪微博</a>
+        <a class="jiathis_button_qzone">QQ空间</a>
+        <a class="jiathis_button_cqq">QQ好友</a>
+        <a class="jiathis_button_fav">收藏夹</a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis"
+           target="_blank">更多</a>
+    </div>
+    <script type="text/javascript">
+        var jiathis_config = {
+            summary: "",
+            shortUrl: false,
+            hideMore: false
+        }
+    </script>
+    <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+    <br/>
+    <br/>
+    <div id="disqus_thread"></div>
+</section>
+<script>
+    var disqus_config = function () {
+        this.page.url = location.href; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = location.pathname; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function () { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//tt-cc.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+</body>
+</html>
