@@ -23,16 +23,13 @@
     <script src="js/SimpleParticle.js"></script>
 </head>
 <body>
-<header>
-    <div class="main-inner">
-        <a href="https://github.com/imwr/SimpleParticle" target="_blank" class="button">
-            <small>View project on</small>
-            GitHub</a>
-
-        <h1>Imwr</h1>
+<section class="main-inner container" id="main-inner">
+    <div class="paper-title text-center">View detail on
+        <a href="https://github.com/imwr">Github</a> or
+        <a href="http://tt-cc.cn">TT-CC.CN</a>
     </div>
-</header>
-<section class="main-inner" id="main-inner">
+    <div class="paper-sep"></div>
+
     <div class="paper-title">Demo1:</div>
     <div class="paper-div">
         <div id="demo1" style="width:100%;height:300px;background: #222;"></div>
@@ -502,44 +499,5 @@
 <script type="text/javascript" src="http://imwr.github.io/resources/syntax/shCore.js"></script>
 <script type="text/javascript" src="http://imwr.github.io/resources/syntax/shBrushJScriptAndXml.js"></script>
 <script type="text/javascript" src="http://imwr.github.io/resources/js/github-example.js"></script>
-<section class="main-inner hide" id="share-comment">
-    <br/>
-    <!-- JiaThis Button BEGIN -->
-    <div class="jiathis_style">
-        <span class="jiathis_txt">分享到：</span>
-        <a class="jiathis_button_weixin">微信</a>
-        <a class="jiathis_button_tsina">新浪微博</a>
-        <a class="jiathis_button_qzone">QQ空间</a>
-        <a class="jiathis_button_cqq">QQ好友</a>
-        <a class="jiathis_button_fav">收藏夹</a>
-        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis"
-           target="_blank">更多</a>
-    </div>
-    <!-- JiaThis Button END -->
-    <br/>
-    <br/>
-
-    <div id="disqus_thread"></div>
-</section>
-<script>
-    var jiathis_config = {
-        summary: "",
-        shortUrl: false,
-        hideMore: false
-    }, disqus_config = function () {
-        this.page.url = location.href; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = location.pathname; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    setTimeout(function () {
-        var d = document, share = d.createElement('script'), dis = d.createElement('script');
-        // add jiathis
-        share.src = '//v3.jiathis.com/code/jia.js';
-        // add disqus
-        dis.src = '//tt-cc.disqus.com/embed.js';
-        dis.setAttribute('data-timestamp', new Date());
-        (d.head || d.body).appendChild(share).appendChild(dis);
-        $("#share-comment").show();
-    }, 1000);
-</script>
 </body>
 </html>
