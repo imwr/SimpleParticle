@@ -39,5 +39,5 @@ onStart: null//粒子渲染前执行的函数。参数：（Particles粒子集�
 
 <!--
 ###demo###
-See [here](http://tt-cc.cn/front-end/jquery-plugins/particle)
+See [here](http://tt-cc.cc/front-end/jquery-plugins/particle)
 -->
